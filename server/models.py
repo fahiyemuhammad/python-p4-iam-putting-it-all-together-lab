@@ -9,7 +9,7 @@ class User(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False, unique=True)
-    _password_hash = db.Column(db.String, nullable=False)  # changed to nullable=False
+    _password_hash = db.Column(db.String, nullable=False) 
     image_url = db.Column(db.String)
     bio = db.Column(db.String)
 
@@ -39,7 +39,6 @@ class User(db.Model, SerializerMixin):
             raise ValueError("Username must be present.")
         return value.strip()
 
-    # 👇 Add init to default password hash
     def __init__(self, **kwargs):
         password = kwargs.pop("password", None)
         super().__init__(**kwargs)
@@ -54,7 +53,6 @@ class Recipe(db.Model, SerializerMixin):
     instructions = db.Column(db.String, nullable=False)
     minutes_to_complete = db.Column(db.Integer)
 
-    # 🔥 Make user_id nullable in the DB to allow the test to run
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     serialize_only = ('id', 'title', 'instructions', 'minutes_to_complete', 'user_id')
