@@ -45,6 +45,7 @@ class User(db.Model, SerializerMixin):
         if not self._password_hash:
             self.password_hash = password or "defaultpassword"
 
+
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
 
@@ -53,7 +54,7 @@ class Recipe(db.Model, SerializerMixin):
     instructions = db.Column(db.String, nullable=False)
     minutes_to_complete = db.Column(db.Integer)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True) 
 
     serialize_only = ('id', 'title', 'instructions', 'minutes_to_complete', 'user_id')
 
@@ -76,10 +77,4 @@ class Recipe(db.Model, SerializerMixin):
     def validate_minutes(self, key, value):
         if value is not None and value < 1:
             raise ValueError("Minutes must be a positive number.")
-        return value
-
-    @validates('user_id')
-    def validate_user_id(self, key, value):
-        if value is None:
-            raise ValueError("Recipe must belong to a user.")
         return value
